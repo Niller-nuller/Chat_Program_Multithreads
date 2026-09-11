@@ -1,0 +1,9 @@
+﻿*** Begin Patch
+*** Update File: src/main/java/ChatServer.java
+@@
+     public static void main(String[] args) {
+-
+-    }
++        startServer();
++    }
+*** End Patch

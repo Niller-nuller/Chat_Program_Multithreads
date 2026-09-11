@@ -1,0 +1,68 @@
+﻿*** Begin Patch
+*** Update File: src/main/java/ClientHandler.java
+@@
+ public class ClientHandler implements Runnable{
+ 
+     private Socket socket;
++    private String username;
+@@
+     @Override
+     public void run() {
+-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+-            ) {
+-            System.out.println("Client connected to " + socket.getInetAddress().getHostName() + Thread.currentThread().getName());
+-
+-
+-        } catch (IOException e){
+-            System.out.println("Error client connection failed");
+-        }
++        try(BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
++            PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true)) {
++
++            System.out.println("Client connected to " + socket.getInetAddress().getHostName() + " " + Thread.currentThread().getName());
++
++            // Ask for username and register
++            sendMessage("Enter username:", writer);
++            while (true) {
++                String requested = receiveMessage(reader);
++                if (requested == null) {
++                    // client disconnected before providing username
++                    return;
++                }
++                requested = requested.trim();
++                if (requested.isEmpty()) {
++                    sendMessage("Username cannot be empty. Try again:", writer);
++                    continue;
++                }
++                boolean ok = ClientRegisty.getInstance().register(requested, this);
++                if (ok) {
++                    this.username = requested;
++                    sendMessage("Welcome, " + requested + "!", writer);
++                    break;
++                } else {
++                    sendMessage("Username already taken. Try another:", writer);
++                }
++            }
++
++            // Placeholder for further per-client loop (receive/process messages)
++            // For now, just echo incoming lines back to client until disconnect
++            String line;
++            while ((line = receiveMessage(reader)) != null) {
++                // simple echo for now
++                sendMessage("Echo: " + line, writer);
++            }
++
++        } catch (IOException e){
++            System.out.println("Error client connection failed: " + e.getMessage());
++        } finally {
++            // cleanup
++            if (this.username != null) {
++                ClientRegisty.getInstance().unregister(this.username);
++            }
++            try {
++                socket.close();
++            } catch (IOException ignored) {}
++        }
+     }
+*** End Patch
