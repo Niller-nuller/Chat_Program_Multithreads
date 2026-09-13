@@ -1,12 +1,14 @@
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ChatClient {
 
     private static final String HOST = "localhost";
     private static final int PORT = 5000;
+    private static String username;
 
     public static void main(String[] args) throws IOException {
         startConnection();
@@ -35,6 +37,7 @@ public class ChatClient {
         IO.println("Please write LOGIN||*Your username*");
         String stringMessage = input.nextLine();
         checkForExit(stringMessage);
+        username = Arrays.toString(stringMessage.split("\\|", 1));
         return messageParser.parseClientStringToMessage(stringMessage, null);
     }
     private static void checkForExit(String stringMessage) {
