@@ -7,32 +7,22 @@ import java.util.concurrent.Executors;
 public class ChatServer {
 
     private static final int PORT = 5000;
-    private static final int MAX_CLIENTS = 3;
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        startServer();
     }
 
     public static void startServer() {
-        try(ServerSocket serverSocket = new ServerSocket(PORT);){
-            ExecutorService chatClientPool = Executors.newFixedThreadPool(MAX_CLIENTS);
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server started on port " + PORT);
+            System.out.println("Waiting for a client connection...");
 
-            acceptsClients(serverSocket, chatClientPool);
-        } catch (IOException e){
-            System.out.println("Serious Error " + e.getMessage());
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected: " + socket.getInetAddress().getHostName());
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Serious Error: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-    public static void acceptsClients(ServerSocket serverSocket, ExecutorService chatClientPool) {
-
-        try {
-            while(true) {
-                Socket socket = serverSocket.accept();
-                chatClientPool.submit(new ClientHandler(socket));
-
-            }
-        }catch (IOException e){
-            System.out.println("Error client connection failed");
         }
     }
 }
