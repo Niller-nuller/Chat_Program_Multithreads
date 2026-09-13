@@ -1,3 +1,6 @@
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +83,7 @@ public class ChatRoomManager {
             return;
         }
 
-        String formattedMessage = "TIMESTAMP|TEXT|" + senderUsername + "|" + message;
+        String formattedMessage =  getCurrentTime() + "|TEXT|" + senderUsername + "|" + message;
         ChatRoom room = rooms.get(roomName);
         if (room == null) {
             return;
@@ -88,6 +91,11 @@ public class ChatRoomManager {
 
         room.addMessageToHistory(formattedMessage);
         broadcastToRoom(roomName, formattedMessage);
+    }
+    public String getCurrentTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
+        return now.format(formatter);
     }
 
     public List<String> getRoomNames() {
