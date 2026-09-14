@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
@@ -15,14 +16,23 @@ public class ChatClient {
     }
     private static void startConnection() throws IOException {
         IO.println("Trying to connect to Chatserver");
-        try(Socket socket = new Socket(HOST, PORT); Scanner input = new Scanner(System.in); MessageParser messageParser = new MessageParser(); ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); ) {
+        try(Socket socket = new Socket(HOST, PORT); Scanner input = new Scanner(System.in); MessageParser messageParser = new MessageParser(); ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
             IO.println("Connected to Chatserver");
             IO.println("Command structure looks like this TYPE|TARGET|PAYLOAD ");
             IO.println("If you wish to exit write EXIT||");
+            ServerListener serverListener = new ServerListener(inputStream, messageParser);
+            Thread serverListenerThread = new Thread(serverListener);
+            serverListenerThread.start();
             while(true) {
                 Message loginMessage = Login(input, messageParser);
                 sendMessage(loginMessage, output);
-                break;
+                Message serverMessage = (Message) inputStream.readObject();
+                if(serverMessage.getType().equals("LOGIN_SUCCESS")) {
+                    serverListener.setUsername(username);
+                    break;
+                } else {
+                    IO.println("Login failed, please try again");
+                }
             }
             while(true) {
                 loggedAndConnected(input, messageParser, output);
