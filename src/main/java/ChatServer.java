@@ -16,19 +16,19 @@ public class ChatServer {
         try(ServerSocket serverSocket = new ServerSocket(PORT);){
             ExecutorService chatClientPool = Executors.newFixedThreadPool(MAX_CLIENTS);
             System.out.println("Server started on port " + PORT);
-
-            acceptsClients(serverSocket, chatClientPool);
+            ClientRegisty clientRegisty = new ClientRegisty();
+            acceptsClients(serverSocket, chatClientPool, clientRegisty);
         } catch (IOException e){
             System.out.println("Serious Error " + e.getMessage());
             e.printStackTrace();
         }
     }
-    public static void acceptsClients(ServerSocket serverSocket, ExecutorService chatClientPool) {
+    public static void acceptsClients(ServerSocket serverSocket, ExecutorService chatClientPool, ClientRegisty clientRegisty) {
 
         try {
             while(true) {
                 Socket socket = serverSocket.accept();
-                chatClientPool.submit(new ClientHandler(socket));
+                chatClientPool.submit(new ClientHandler(socket, clientRegisty));
 
             }
         }catch (IOException e){

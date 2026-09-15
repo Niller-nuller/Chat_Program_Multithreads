@@ -33,6 +33,10 @@ public class MessageParser implements AutoCloseable {
         return messageInString;
     }
 
+    public String parseClientMessageToString(Message message) {
+        String messageInString = message.clientMessageToString();
+        return messageInString;
+    }
 
 
     private static String[] validateClientInput(String stringMessage) throws TypeException, CommandLengthException, BlankException {

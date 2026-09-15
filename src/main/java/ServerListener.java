@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class ServerListener implements Runnable {
@@ -17,26 +18,31 @@ public class ServerListener implements Runnable {
     }
 
     public void listen() {
+        try {
             while (true) {
-                try {
-                Message message = (Message) socketInput.readObject();
-                if(message.getTarget().equals(username) || message.getTarget().equals(chatRoom) || message.getTarget().equals("ALL")) {
-                    IO.println(handleMessage(message));
-                }
-                } catch (Exception e) {
-                    System.out.println("Error in ServerListener: " + e.getMessage());
-                }
+                    Message message = (Message) socketInput.readObject();
+                    if (message.getTarget().equals(username) || message.getTarget().equals(chatRoom) || message.getTarget().equals("ALL")) {
+                        IO.println(handleMessage(message));
+                    }
             }
+        } catch (ClassNotFoundException e) {
+            IO.println("Error in ServerListener: " + e.getMessage());
+
+        } catch (IOException e) {
+            IO.println("Error in ServerListener: " + e.getMessage());
+        }
     }
 
-    private String handleMessage(Message message){
+    private String handleMessage(Message message) {
         String messageInString = messageParser.parseServerMessageToString(message);
         return messageInString;
     }
 
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public void setChatRoom(String chatRoom) {
         this.chatRoom = chatRoom;
     }

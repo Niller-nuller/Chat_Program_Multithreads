@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ChatClient {
 
@@ -28,6 +29,7 @@ public class ChatClient {
                 sendMessage(loginMessage, output);
                 Message serverMessage = (Message) inputStream.readObject();
                 if(serverMessage.getType().equals("LOGIN_SUCCESS")) {
+                    System.out.println("1");
                     serverListener.setUsername(username);
                     break;
                 } else {
