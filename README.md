@@ -1,4 +1,9 @@
 ::VEJLEDNING::
+
+
+
+
+
 1, find Chatserver
 2, click på den grønne pil til venstre fra "public class ChatServer"
 3, find chatclient og klik på den grønne pil til venstre fra "public class ChatServer"
