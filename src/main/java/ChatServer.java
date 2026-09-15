@@ -9,33 +9,44 @@ public class ChatServer {
 
     private static final int PORT = 5000;
     private static final int MAX_CLIENTS = 3;
-    private static final ArrayList<String> clients = new ArrayList<>();
-    public static void main(String[] args) {
+    private final ClientRegistry clientRegistry;
+    private final ChatRoomManager chatRoomManager;
+    private final ExecutorService chatMaids;
 
-        startServer();
+    public ChatServer() {
+        this.chatMaids = Executors.newFixedThreadPool(MAX_CLIENTS);
+        this.clientRegistry = new ClientRegistry();
+        this.chatRoomManager = new ChatRoomManager();
     }
 
-    public static void startServer() {
+    public static void main(String[] args) {
+        new ChatServer().startServer();
+
+    }
+
+    public void startServer() {
         try(ServerSocket serverSocket = new ServerSocket(PORT);){
-            ExecutorService chatClientPool = Executors.newFixedThreadPool(MAX_CLIENTS);
             System.out.println("Server started on port " + PORT);
 
-            acceptsClients(serverSocket, chatClientPool);
+            acceptsClients(serverSocket, chatMaids);
         } catch (IOException e){
             System.out.println("Serious Error " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            chatMaids.shutdown();
         }
     }
-    public static void acceptsClients(ServerSocket serverSocket, ExecutorService chatClientPool) {
+    public void acceptsClients(ServerSocket serverSocket, ExecutorService chatClientPool) {
 
         try {
             while(true) {
                 Socket socket = serverSocket.accept();
-                chatClientPool.submit(new ClientHandler(socket));
+                chatClientPool.submit(new ClientHandler(socket, clientRegistry, chatRoomManager));
 
             }
         }catch (IOException e){
             System.out.println("Error client connection failed");
         }
     }
+
 }
