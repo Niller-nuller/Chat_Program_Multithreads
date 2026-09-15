@@ -1,3 +1,23 @@
+::VEJLEDNING::
+1, find Chatserver
+2, click på den grønne pil til venstre fra "public class ChatServer"
+3, find chatclient og klik på den grønne pil til venstre fra "public class ChatServer"
+4, i konolen kan du nu indtaste et bruger navn
+5, du er nu i generelt chat rummet. forskellige muligheder er nu åbne til dig
+6, ved brugen af join er det forslået at man bruger /rooms kommandoen for at se listen over all chatroom tilgængelig
+7, for at join en chatroom så skal man bare indtast /join + navn på chatroomet og vis chatroomet ikke allerede eksister så vil det blive oprettet
+8, /msg er for direkte private beskeder for at bruge den skal man indtaste /msg + navn på modtager + beskeden.
+9, /who for at se en liste af bruger i det samme chatrum som du er i.
+10, /history henter en liste af alle beskeder sent i det chatrum som du befinder dig i
+11, /help vil bringe op kommando listen igen
+12, /quit vil lukke klienten
+
+
+
+
+
+
+
 der er blevet arbejde med både GitHub copilot og Claude ai model sonnet 5 (medium)
 
 Claude har givet forslag og eksempler på forskellige måder at gemme chatrooms og dens beskeder. niels fandt selv cuncurrenthashmap hvor efter jeg brugte Claude til at undersøg dens funktioner og om den passer til projektet 
