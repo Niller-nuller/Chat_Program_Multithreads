@@ -74,6 +74,8 @@ disse samtaler med Claude var så givet til GitHub copilot for context og dereft
 AI-dokumentation
 
 claude 
+hvis man skulle lave et chat rum i jave hvordan vil manger sørger for at alle kan skrive på samme tid og se de nye beskeder
+
 Nej, det er en meget almindelig misforståelse — lad mig rede den ud, for den er faktisk vigtig at forstå korrekt.
 Hvad port faktisk er her
 
@@ -162,73 +164,6 @@ Er det nødvendigt for et lille skoleprojekt?
 Ærligt talt: nej, ikke strengt nødvendigt. Hvis det er et lille lærings-/afleveringsprojekt, hvor du selv kører både server og klient på samme maskine hele tiden, er hardcoded "localhost" og 5000 fuldstændig fint, og du sparer dig selv for kompleksiteten.
 
 Men det koster dig næsten ingenting at gøre det fleksibelt (det er jo bare de to linjer, du allerede har set), og du får friheden til senere at køre det mod en anden maskine, eller teste flere instanser side om side, uden at skulle pille ved kildekoden. Det er derfor, det er en meget almindelig vane i "rigtig" kode — men det er en afvejning af lidt ekstra kode nu vs. fleksibilitet senere, ikke en hård nødvendighed.
-Write a message…
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-
-github-copilot
-i  need to standerd unite test that fit the projeckt do not commite or push any changes. the test has to center around user connection and the effects of multiple users connected including what if 2 users choose the same brugernavn at the same time also what if they send a message in the same chatroom at the same time
-Got it — I can add standard unit tests for your project focused on:
-1.
-User connection flow with multiple concurrent users  
-2.
-Race case: two users picking the same brugernavn at the same time  
-3.
-Concurrent messaging: two users sending to the same chatroom at the same time  
-I will not commit or push anything.
-I need to inspect your code/test setup first to implement tests that match your exact framework and architecture.
-Fork Chat
-gpt-5.3-codex • 5.1 Credits
-go ahead then
-I’ll quickly map the project structure and existing test conventions, then add focused concurrency tests for connection, duplicate usernames, and same-room simultaneous messaging.
-Invoked
-List directory tree - intellij-idea-2026.2
-Invoked
-Search file - intellij-idea-2026.2
-Invoked
-Search file - intellij-idea-2026.2
-Invoked
-Search file - intellij-idea-2026.2
-Invoked
-List directory tree - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-Invoked
-Read - intellij-idea-2026.2
-I found no existing test suite, so I’m adding JUnit tests under src/test/java plus minimal Maven test-scope config so they run cleanly.
-Invoked
-Edit File - intellij-idea-2026.2
-Invoked
-Create new file - intellij-idea-2026.2
-Ran
-mvn -q test
-Implemented: I added a new JUnit test class that matches your project and targets exactly the concurrency cases you asked for.
-What I changed
-1.
-Added src/test/java/ConcurrentChatBehaviorTest.java with:
-1.
-concurrentDuplicateUsernameRegistration_AllowsExactlyOne
-       Verifies that when two users try the same brugernavn concurrently, only one registration succeeds.
-2.
-twoUsersConnectedInSameRoom_ConcurrentBroadcasts_AppearInHistory
-       Verifies that when two connected users send at the same time in the same room, both messages are recorded exactly once in chat history.
-2.
-Updated pom.xml test setup:
-1.
-JUnit dependency moved to proper test scope (4.13.2).
-2.
-Added maven-surefire-plugin so tests run in standard Maven test lifecycle.
-I did not commit or push any changes.
- I could not run tests in this environment because mvn is not installed (mvn command not found).
 
  
 
