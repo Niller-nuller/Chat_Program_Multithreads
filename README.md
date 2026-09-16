@@ -29,6 +29,24 @@
 12, /quit vil lukke klienten
 
 
+::PROTOCOL BESKRIVELSE::
+(PLACEHOLDER)
+•
+Transport: TCP (port 5000), line-orienteret tekst (println / readLine).
+•
+Handshake: server sender "Enter username:", klient sender brugernavn; server svarer "Welcome..." og placerer klient i "general".
+•
+Kommandoer (start med '/'): /join, /rooms, /who, /msg <user> <msg>, /history, /help, /quit.
+•
+Beskeder: plaintext broadcast i rummet; format Message.toString() = "[timestamp] sender: text".
+•
+Private beskeder: /msg => sender ser "[DM to X] …", modtager "[DM from Y] …".
+•
+Historik: per-room ConcurrentLinkedDeque, kan hente N seneste.
+•
+System: systembeskeder med sender "SYSTEM".
+•
+Bemærk: ingen kryptering, ingen binær framing, maks 3 samtidige klienter (thread-pool).
 
 
 
