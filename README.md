@@ -1,3 +1,11 @@
+klasse diagram 
+https://app.diagrams.net/#G1LfUJDYKiMvWLJkI4YRQLkjhYqiqt_vLB
+
+
+
+
+
+
 ::VEJLEDNING::
 
 
