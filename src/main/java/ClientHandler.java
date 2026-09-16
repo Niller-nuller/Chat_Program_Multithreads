@@ -8,6 +8,10 @@ public class ClientHandler implements Runnable{
     private final ClientRegistry clientRegistry;
     private final ChatRoomManager chatRoomManager;
     private String clientUsername;
+    private String currentChatRoom;
+    private PrintWriter writer;
+    private String currentSyntax;
+    private boolean running = true;
 
     public ClientHandler(Socket socket, ClientRegistry clientRegistry, ChatRoomManager chatRoomManager) {
         this.socket = socket;
@@ -18,41 +22,42 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-            ) {
-
-            System.out.println("Client connected to " + socket.getInetAddress().getHostName() + Thread.currentThread().getName());
-
-            login(reader,writer);
-
-
-
-        } catch (IOException e) {
+        try
+             {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 setWriter(new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true));
+                 System.out.println("Client connected to " + socket.getInetAddress().getHostName() + Thread.currentThread().getName());
+                login(reader);
+                chatRoomLoop(reader);
+        } catch (SocketException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e){
             System.out.println("Error client connection failed");
             clientRegistry.removeClientFromActiveClients(clientUsername);
         }
     }
 
-    public void login(BufferedReader reader,PrintWriter writer) throws IOException {
 
+    public void login(BufferedReader reader) throws IOException {
+        sendMessage("You need to login, please send your username");
         try {
             while(true) {
                 String username = receiveMessage(reader);
 
                 if (checkUsernameMessageStatus(username)) {
 
-                    sendMessage("EMPTY|Username is empty, please try again", writer);
+                    sendMessage("EMPTY|Username is empty, please try again");
                 } else if (checkUsernameAvailable(username)) {
 
-                    sendMessage("IN USE|Username already in use, please choose a different one", writer);
+                    sendMessage("IN USE|Username already in use, please choose a different one");
                 } else {
 
                     clientUsername = username;
 
                     clientRegistry.registerClient(username, this);
 
-                    sendMessage("ACCEPTED|Welcome to the server", writer);
+                    sendMessage("ACCEPTED|Welcome to the server");
                     break;
                 }
 
@@ -65,7 +70,6 @@ public class ClientHandler implements Runnable{
     public boolean checkUsernameMessageStatus(String username) throws IOException {
         if (username == null || username.equals("") || username.isEmpty()){
             return true;
-
         }
         return false;
     }
@@ -75,7 +79,7 @@ public class ClientHandler implements Runnable{
         return clientRegistry.checkUsernameAvailability(username);
     }
 
-    public void sendMessage(String message, PrintWriter writer) throws SocketException {
+    public void sendMessage(String message) throws SocketException {
         writer.println(message);
     }
 
@@ -88,10 +92,40 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public void chatRoomLoop(){
+    public void chatRoomLoop(BufferedReader reader) throws IOException {
 
-
-
+        setNewJoins();
+        String input;
+        while(running && (input = reader.readLine()) != null) {
+            input = receiveMessage(reader);
+            switch(input){
+                case "1" ->
+            }
+        }
     }
-
+    private void defaultCommands(BufferedReader reader) throws IOException {
+        String listOfCommands = "Press 1 for command list. rooms to see list of available chat rooms";
+    }
+    private void setNewJoins() throws SocketException {
+        try {
+            chatRoomManager.joinRoom(this, "Default");
+            setCurrentChatRoom("Default");
+            setCurrentSyntax("LOGIN| " + clientUsername);
+            chatRoomManager.broadcastToRoom(currentChatRoom, getCurrentSyntax());
+        } catch(SocketException e){
+            throw new SocketException("Failed to connect client to default chat room");
+        }
+    }
+    public void setCurrentChatRoom(String currentChatRoom) {
+        this.currentChatRoom = currentChatRoom;
+    }
+    public void setCurrentSyntax(String currentSyntax){
+        this.currentSyntax = currentSyntax;
+    }
+    public String getCurrentSyntax(){
+        return currentSyntax;
+    }
+    public void setWriter(PrintWriter writer) {
+        this.writer = writer;
+    }
 }

@@ -44,4 +44,5 @@ public class ChatRoom {
     public List<String > getChatRoomHistory(){
         return new CopyOnWriteArrayList<>();
     }
+
 }

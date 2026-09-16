@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ServerListener implements Runnable {
 
     private final BufferedReader in;
-    private final boolean running = true;
+    private boolean running = true;
 
     public ServerListener(BufferedReader in) {
         this.in = in;
@@ -14,6 +14,7 @@ public class ServerListener implements Runnable {
     @Override
     public void run() {
         try {
+
             String serverMessage;
             while (running && (serverMessage = in.readLine()) != null) {
                 System.out.println(serverMessage);
@@ -21,5 +22,8 @@ public class ServerListener implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException("ServerListener Error: " + e.getMessage());
         }
+    }
+    public void stopServerListener(){
+        this.running = false;
     }
 }

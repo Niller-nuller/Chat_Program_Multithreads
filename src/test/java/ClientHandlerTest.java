@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,9 +20,8 @@ public class ClientHandlerTest {
         BufferedReader reader = new BufferedReader(new StringReader(""));
         StringWriter sw = new StringWriter();
         PrintWriter writer = new PrintWriter(sw, true);
-
-
         handler.checkUsernameMessageStatus("");
+
         assertTrue(true);
     }
 
@@ -34,9 +34,10 @@ public class ClientHandlerTest {
 
         BufferedReader reader = new BufferedReader(new StringReader("alice\n"));
         StringWriter sw = new StringWriter();
+        handler.setWriter(new PrintWriter(sw, true));
         PrintWriter writer = new PrintWriter(sw, true);
 
-        handler.login(reader, writer);
+        handler.login(reader);
 
         assertTrue(registry.isUsernameActive("alice"));
     }
@@ -48,9 +49,10 @@ public class ClientHandlerTest {
 
         BufferedReader reader = new BufferedReader(new StringReader("alice\n"));
         StringWriter sw = new StringWriter();
+        handler.setWriter(new PrintWriter(sw, true));
         PrintWriter writer = new PrintWriter(sw, true);
 
-        handler.login(reader, writer);
+        handler.login(reader);
     }@Test
     public void testLogin_userPresentAfterLogin() throws Exception {
         ClientRegistry registry = new ClientRegistry();
@@ -59,9 +61,9 @@ public class ClientHandlerTest {
 
         BufferedReader reader = new BufferedReader(new StringReader("alice\n"));
         StringWriter sw = new StringWriter();
-        PrintWriter writer = new PrintWriter(sw, true);
+        handler.setWriter(new PrintWriter(sw, true));
 
-        handler.login(reader, writer);
+        handler.login(reader);
 
         assertTrue(registry.isUsernameActive("alice"));
         assertTrue(sw.toString().contains("ACCEPTED|Welcome to the server"));
@@ -75,9 +77,9 @@ public class ClientHandlerTest {
 
         BufferedReader reader = new BufferedReader(new StringReader("\nalice\n"));
         StringWriter sw = new StringWriter();
-        PrintWriter writer = new PrintWriter(sw, true);
+        handler.setWriter(new PrintWriter(sw, true));
 
-        handler.login(reader, writer);
+        handler.login(reader);
 
         assertTrue(sw.toString().contains("EMPTY|Username is empty, please try again"));
         assertTrue(sw.toString().contains("ACCEPTED|Welcome to the server"));
@@ -96,9 +98,9 @@ public class ClientHandlerTest {
         ClientHandler handler = new ClientHandler(new Socket(), registry, roomManager);
         BufferedReader reader = new BufferedReader(new StringReader("alice\nbob\n"));
         StringWriter sw = new StringWriter();
-        PrintWriter writer = new PrintWriter(sw, true);
+        handler.setWriter(new PrintWriter(sw, true));
 
-        handler.login(reader, writer);
+        handler.login(reader);
 
         String output = sw.toString();
         assertTrue(output.contains("IN USE|Username already in use, please choose a different one"));
@@ -126,12 +128,28 @@ public class ClientHandlerTest {
         BufferedReader reader = new BufferedReader(new StringReader("alice\n"));
         StringWriter sw = new StringWriter();
         PrintWriter writer = new PrintWriter(sw, true);
+        secondHandler.setWriter(new PrintWriter(sw, true));
 
-        secondHandler.login(reader, writer);
+
+        secondHandler.login(reader);
 
         String output = sw.toString();
         assertFalse(output.contains("IN USE"));
         assertTrue(output.contains("ACCEPTED|Welcome to the server"));
         assertTrue(registry.isUsernameActive("alice"));
+    }
+    @Test
+    public void testClientReceivesRoomBroadcastAfterJoining() throws Exception {
+        ClientRegistry registry = new ClientRegistry();
+        ChatRoomManager roomManager = new ChatRoomManager();
+        ClientHandler client = new ClientHandler(new Socket(), registry, roomManager);
+
+        StringWriter sw = new StringWriter();
+        client.setWriter(new PrintWriter(sw, true));
+
+        roomManager.joinRoom(client, "Default");
+        roomManager.broadcastToRoom("Default", "LOGIN| alice");
+
+        assertTrue(sw.toString().contains("LOGIN| alice"));
     }
 }
