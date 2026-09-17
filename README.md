@@ -1,5 +1,6 @@
 klasse diagram 
 https://app.diagrams.net/#G1LfUJDYKiMvWLJkI4YRQLkjhYqiqt_vLB
+sekvensdiagram https://drive.google.com/file/d/1DH77_aKhVuOb--KXmif08GkNEmU2eu1v/view?usp=sharing
 
 
 
