@@ -89,7 +89,7 @@ En klient sender en fejlformateret besked - resultat i sagen med private besked 
 
 En klient lukker uventet - resultat klient bliver lukke manuelt fra kode editor resulter i at systemet fjerner den lukket brugers information
 
-Den valgte udvidelse anvendes - resultat nær klient kalder history bliver en historik printet ud i konsollen  
+Den valgte udvidelse anvendes - resultat når klient kalder history bliver en historik printet ud i konsollen  
 
 junite test 
 <img width="1390" height="649" alt="billede" src="https://github.com/user-attachments/assets/1c190d84-0a6f-445a-9a7d-0121dc0ec9f8" />
