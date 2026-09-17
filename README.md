@@ -66,35 +66,16 @@ ClientHandler håndtagene hvis klienten gerne vil se alle rum, se alle som er i 
 Hvis ingen kommandoer skrives forventer ClientHandler at klienten gerne vil sende en besked til rummet de befinder sig i.
 
 
-
-(PLACEHOLDER)
-
-•
-Transport: TCP (port 5000), line-orienteret tekst (println / readLine).
-•
-
-Handshake: server sender "Enter username:", klient sender brugernavn; server svarer "Welcome..." og placerer klient i "general".
-•
-
-Kommandoer (start med '/'): /join, /rooms, /who, /msg <user> <msg>, /history, /help, /quit.
-•
-
-Beskeder: plaintext broadcast i rummet; format Message.toString() = "[timestamp] sender: text".
-•
-
-Private beskeder: /msg => sender ser "[DM to X] …", modtager "[DM from Y] …".
-•
-
-Historik: per-room ConcurrentLinkedDeque, kan hente N seneste.
-•
-
-System: systembeskeder med sender "SYSTEM".
-•
-
-Bemærk: ingen kryptering, ingen binær framing, maks 3 samtidige klienter (thread-pool).
+forklaring af trådmodellen
+vi bruger en "Thread per client" metode. hovedtråden sidder i et relativt uendeligt loop og gør kun en ting, at vente på nye forbindelser via accept().
+så snart en klient skaber forbindelse så giver den en tråd til den nye klient og går straks tilbage til at vente igen.
+vi bruge denne metode fordi vi gerne vil have at flere klient kan ager på samme tid uden at de blokker funktioner for hinanden, altså så klient løber parallelitet til hinanden.
 
 
-
+beskrivelse af valgte udvidelse:
+vi valgte at lave chat historik siden at selve chat feed'et er sådan set allerede en historik.
+vi lavet en ConcurrentLinkedDeque kaldet history som indeholder all baskerne i chatrummet som den nu befinder sig i.
+efter det så lavet vi en history kommando som printede historikken ud når man kalder på den.
 
 
 
@@ -105,6 +86,9 @@ Claude har givet forslag og eksempler på forskellige måder at gemme chatrooms 
 ideer om hvordan navigation af de forskellige chatrooms og konsol blev udarbejde med claude som igen gav eksempler og forslag
 
 disse samtaler med Claude var så givet til GitHub copilot for context og derefter udarbejde den en implementerings plan og issues 
+
+test resultater:
+<img width="1390" height="649" alt="billede" src="https://github.com/user-attachments/assets/1c190d84-0a6f-445a-9a7d-0121dc0ec9f8" />
 
 
 
