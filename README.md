@@ -39,31 +39,32 @@ sekvensdiagram https://drive.google.com/file/d/1DH77_aKhVuOb--KXmif08GkNEmU2eu1v
 
 
 ::PROTOCOL BESKRIVELSE::
-Protokolen i programmet er ClientHandler.
+Protokollen i programmet er ClientHandler.
 
-Der bliver æavet en ny ClientHandler per Thread.
+Der bliver lavet en ny ClientHandler per Thread.
 
-ClientHandler er logikken for for serveren, den skriver og håndtaggere beskeder og kommandoer fra klienten.
+ClientHandler er logikken for serveren, den skriver og håndtagene beskeder og kommandoer fra klienten.
 
-ClientHandler starter med et lave BufferedeReader og instansinere PrintWriter i en Try.
+ClientHandler starter med at lave BufferedReader og instantiere PrintWriter i en Try.
 
-Der efter udskriver den en besked til serveren om at der er en client der har connected.
+Derefter udskriver den en besked til serveren om at der er en klient der har en connection.
 
 Efter prompter ClientHandler klienten om at indtaste deres brugere navn.
 
-ClientHandler derefter håndtaggere klientens brugere navn, sender en besked tilbage vis brugere navnet er taget/i brug.
+ClientHandler derefter håndtaget klientens brugere navn, sender en besked tilbage vis brugere navnet er taget/i brug.
 
-ClientHandler sender en besked når brugeren logger ind korrect.
+ClientHandler sender en besked når brugeren logger ind korrekt.
 
 ClientHandler gemmer klienter i ClientRegisty efter de har logget ind.
 
 ClientHandler sender en besked om alle mulige kommandoer som serveren tager imod.
 
-ClientHandler derefter venter på at klienten skriver enden en kommando eller besked.
+ClientHandler derefter venter på at klienten skriver en kommando eller besked.
 
-ClientHandler håndtaggere vis klienten gerne vil see alle rum, see alle som er i rummet, skifte rum, sende en privat besked, see rummets historie, gensende beskeden med kommandoer og forlade serveren.
+ClientHandler håndtagene hvis klienten gerne vil se alle rum, se alle som er i rummet, skifte rum, sende en privat besked, se rummets historie, gensende beskeden med kommandoer og forlade serveren.
 
-Vis ingen kommandoer skrives forventer ClientHandler at klienten gerne vil sende en besked til rummet de befinder sig i.
+Hvis ingen kommandoer skrives forventer ClientHandler at klienten gerne vil sende en besked til rummet de befinder sig i.
+
 
 
 (PLACEHOLDER)
