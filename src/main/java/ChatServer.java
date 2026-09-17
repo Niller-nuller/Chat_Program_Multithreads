@@ -9,7 +9,7 @@ public class ChatServer {
     private static final int PORT = 5000;
     private static final int MAX_CLIENTS = 3;
     public static void main(String[] args) {
-
+        startServer();
     }
 
     public static void startServer() {
