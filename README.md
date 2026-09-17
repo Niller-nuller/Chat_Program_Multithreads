@@ -91,6 +91,9 @@ En klient lukker uventet - resultat klient bliver lukke manuelt fra kode editor 
 
 Den valgte udvidelse anvendes - resultat nær klient kalder history bliver en historik printet ud i konsollen  
 
+junite test 
+<img width="1390" height="649" alt="billede" src="https://github.com/user-attachments/assets/1c190d84-0a6f-445a-9a7d-0121dc0ec9f8" />
+
 
 
 der er blevet arbejde med både GitHub copilot og Claude ai model sonnet 5 (medium)
@@ -100,9 +103,6 @@ Claude har givet forslag og eksempler på forskellige måder at gemme chatrooms 
 ideer om hvordan navigation af de forskellige chatrooms og konsol blev udarbejde med claude som igen gav eksempler og forslag
 
 disse samtaler med Claude var så givet til GitHub copilot for context og derefter udarbejde den en implementerings plan og issues 
-
-test resultater:
-<img width="1390" height="649" alt="billede" src="https://github.com/user-attachments/assets/1c190d84-0a6f-445a-9a7d-0121dc0ec9f8" />
 
 
 
