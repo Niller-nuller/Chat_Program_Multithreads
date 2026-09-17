@@ -11,8 +11,6 @@ sekvensdiagram https://drive.google.com/file/d/1DH77_aKhVuOb--KXmif08GkNEmU2eu1v
 
 
 
-
-
 1, find Chatserver
 
 2, click på den grønne pil til venstre fra "public class ChatServer"
@@ -76,6 +74,22 @@ beskrivelse af valgte udvidelse:
 vi valgte at lave chat historik siden at selve chat feed'et er sådan set allerede en historik.
 vi lavet en ConcurrentLinkedDeque kaldet history som indeholder all baskerne i chatrummet som den nu befinder sig i.
 efter det så lavet vi en history kommando som printede historikken ud når man kalder på den.
+
+
+
+Testresultater:
+
+tre klienter forbinder samtidig - resultat all tre forbinder
+
+to bruger vælger samme brugernavn - resultat den bruger som på servers side først sendt brugernavnet får det den anden får en fejl besked om utilgængelighed 
+
+en bruger sender en besked i et rum - resultat besked bliver broadcast i den valgte rum og ingen andre 
+
+En klient sender en fejlformateret besked - resultat i sagen med private besked bliver brugen send en reminder om brugen af kommandoen
+
+En klient lukker uventet - resultat klient bliver lukke manuelt fra kode editor resulter i at systemet fjerner den lukket brugers information
+
+Den valgte udvidelse anvendes - resultat nær klient kalder history bliver en historik printet ud i konsollen  
 
 
 
