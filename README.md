@@ -38,6 +38,33 @@ https://app.diagrams.net/#G1LfUJDYKiMvWLJkI4YRQLkjhYqiqt_vLB
 
 
 ::PROTOCOL BESKRIVELSE::
+Protokolen i programmet er ClientHandler.
+
+Der bliver æavet en ny ClientHandler per Thread.
+
+ClientHandler er logikken for for serveren, den skriver og håndtaggere beskeder og kommandoer fra klienten.
+
+ClientHandler starter med et lave BufferedeReader og instansinere PrintWriter i en Try.
+
+Der efter udskriver den en besked til serveren om at der er en client der har connected.
+
+Efter prompter ClientHandler klienten om at indtaste deres brugere navn.
+
+ClientHandler derefter håndtaggere klientens brugere navn, sender en besked tilbage vis brugere navnet er taget/i brug.
+
+ClientHandler sender en besked når brugeren logger ind korrect.
+
+ClientHandler gemmer klienter i ClientRegisty efter de har logget ind.
+
+ClientHandler sender en besked om alle mulige kommandoer som serveren tager imod.
+
+ClientHandler derefter venter på at klienten skriver enden en kommando eller besked.
+
+ClientHandler håndtaggere vis klienten gerne vil see alle rum, see alle som er i rummet, skifte rum, sende en privat besked, see rummets historie, gensende beskeden med kommandoer og forlade serveren.
+
+Vis ingen kommandoer skrives forventer ClientHandler at klienten gerne vil sende en besked til rummet de befinder sig i.
+
+
 (PLACEHOLDER)
 
 •
