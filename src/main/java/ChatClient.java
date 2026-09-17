@@ -4,7 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
+
 
 public class ChatClient {
 
@@ -15,6 +15,7 @@ public class ChatClient {
     public static void main(String[] args) throws IOException {
         startConnection();
     }
+
     private static void startConnection() throws IOException {
         IO.println("Trying to connect to Chatserver");
         try(Socket socket = new Socket(HOST, PORT); Scanner input = new Scanner(System.in); MessageParser messageParser = new MessageParser(); ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
@@ -23,27 +24,26 @@ public class ChatClient {
             IO.println("If you wish to exit write EXIT||");
             ServerListener serverListener = new ServerListener(inputStream, messageParser);
             Thread serverListenerThread = new Thread(serverListener);
-            serverListenerThread.start();
             while(true) {
                 Message loginMessage = Login(input, messageParser);
                 sendMessage(loginMessage, output);
                 Message serverMessage = (Message) inputStream.readObject();
                 if(serverMessage.getType().equals("LOGIN_SUCCESS")) {
-                    System.out.println("1");
                     serverListener.setUsername(username);
                     break;
                 } else {
                     IO.println("Login failed, please try again");
                 }
             }
+            serverListenerThread.start();
             while(true) {
                 loggedAndConnected(input, messageParser, output);
             }
-
         } catch (Exception e){
             IO.println(e.getMessage());
         }
     }
+
     private static Message Login(Scanner input, MessageParser messageParser) {
         IO.println("To continue you have to log in");
         IO.println("Please write LOGIN||*Your username*");
@@ -52,6 +52,7 @@ public class ChatClient {
         username = Arrays.toString(stringMessage.split("\\|", 1));
         return messageParser.parseClientStringToMessage(stringMessage, null);
     }
+
     private static void checkForExit(String stringMessage) {
         String[] parts = stringMessage.split("\\|", 3);
         if (parts[0].equals("EXIT")) {
@@ -62,15 +63,18 @@ public class ChatClient {
             }
         }
     }
+
     private static void loggedAndConnected(Scanner input, MessageParser messageParser, ObjectOutputStream output) {
         welcomeToChatServer();
         String stringMessage = input.nextLine();
         checkForExit(stringMessage);
         try{
-        sendMessage(messageParser.parseClientStringToMessage(stringMessage, null), output);} catch (IOException e){
+        sendMessage(messageParser.parseClientStringToMessage(stringMessage, null), output);}
+        catch (IOException e){
             IO.println(e.getMessage());
         }
     }
+
     private static void welcomeToChatServer() {
         IO.println("Welcome to Chatserver");
         IO.println("Command available");
@@ -85,7 +89,6 @@ public class ChatClient {
         IO.println("PRIVATE signifies the command, target is the username fo the person you wish to send a private text to and your text is the text you wish to write to the target");
         IO.println("---------------------");
     }
-
 
     private static void sendMessage(Message message, ObjectOutputStream output) throws IOException {
         output.writeObject(message);

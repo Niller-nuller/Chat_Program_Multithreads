@@ -11,7 +11,6 @@ public class ClientHandler implements Runnable {
         this.clientRegisty = clientRegisty;
     }
 
-
     @Override
     public void run() {
         try (MessageParser messageParser = new MessageParser(); ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); ObjectInputStream socketInput = new ObjectInputStream(socket.getInputStream());) {
